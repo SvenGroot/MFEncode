@@ -6,6 +6,20 @@ using namespace ookii::chrono;
 
 using unique_cursor_enable = wil::unique_call<decltype(ookii::EnableConsoleCursor), ookii::EnableConsoleCursor>;
 
+std::wstring ChangeExtension(std::wstring_view path, std::wstring_view newExtension)
+{
+    auto index = path.find_last_of(L"./\\");
+    std::wstring_view base = path;
+    if (index != std::wstring_view::npos && path[index] == L'.')
+    {
+        base = path.substr(0, index);
+    }
+
+    std::wstring result{base};
+    result.append(newExtension);
+    return result;
+}
+
 struct Arguments
 {
     std::wstring Input;
@@ -18,9 +32,14 @@ struct Arguments
         {
             Arguments args;
             parser.AddArgument(args.Input, L"Input").Required().Positional().ValueDescription(L"Path")
-                .AddArgument(args.Output, L"Output").Required().Positional().ValueDescription(L"Path");
+                .AddArgument(args.Output, L"Output").Positional().ValueDescription(L"Path");
 
             parser.Parse(argc, argv);
+            if (args.Output.length() == 0)
+            {
+                args.Output = ChangeExtension(args.Input, L".m4a"sv);
+            }
+
             return args;
         }
         catch (const ookii::CommandLineException &ex)
