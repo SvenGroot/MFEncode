@@ -58,7 +58,7 @@ private:
 class TranscodeSession final : private ISessionEvents
 {
 public:
-    TranscodeSession(MediaSource &source, PCWSTR output, UINT32 avgBytesPerSecond);
+    TranscodeSession(MediaSource &source, PCWSTR output, int quality);
 
     void Start();
     bool Wait(std::chrono::milliseconds timeout);
@@ -103,5 +103,6 @@ wil::com_ptr<IMFMediaSession> CreateMediaSession(IMFAttributes *configuration = 
 wil::com_ptr<IMFTranscodeProfile> CreateAacTranscodeProfile(UINT32 bitsPerSample, UINT32 samplesPerSecond, UINT32 channel,
                                                     UINT32 avgBytesPerSecond);
 
+UINT32 GetAacQualityBytesPerSecond(int quality);
 
 }

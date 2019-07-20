@@ -9,6 +9,8 @@ constexpr UINT32 c_aacProfileL2 = 0x29; // Max 2 channels, 48kHz
 constexpr UINT32 c_aacProfileL4 = 0x2a; // Max 5 channels, 48kHz
 constexpr UINT32 c_aacProfileL5 = 0x2b; // Max 5 channels, 96kHz
 
+constexpr UINT32 c_aacQualityBytesPerSecond[] = { 12000, 16000, 20000, 24000 };
+
 wil::com_ptr<IMFSourceResolver> CreateSourceResolver()
 {
     wil::com_ptr<IMFSourceResolver> resolver;
@@ -64,6 +66,20 @@ wil::com_ptr<IMFTranscodeProfile> CreateAacTranscodeProfile(UINT32 bitsPerSample
     return profile;
 }
 
+UINT32 GetAacQualityBytesPerSecond(int quality)
+{
+    if (quality < 1)
+    {
+        quality = 1;
+    }
+    else if (quality > std::size(c_aacQualityBytesPerSecond))
+    {
+        quality = static_cast<int>(std::size(c_aacQualityBytesPerSecond));
+    }
+
+    return c_aacQualityBytesPerSecond[quality - 1];
+}
+
 [[nodiscard]] unique_mfshutdown_call Startup()
 {
     THROW_IF_FAILED(MFStartup(MF_VERSION));
@@ -108,13 +124,13 @@ IMFMediaSource *MediaSource::Get()
     return m_source.get();
 }
 
-TranscodeSession::TranscodeSession(MediaSource &source, PCWSTR output, UINT32 avgBytesPerSecond)
+TranscodeSession::TranscodeSession(MediaSource &source, PCWSTR output, int quality)
     : m_session{CreateMediaSession()},
       m_eventSink{SessionEventSink::Create(*this)}
 {
     auto sourceAttributes = source.GetAttributes();
     auto profile = CreateAacTranscodeProfile(sourceAttributes.BitsPerSample, sourceAttributes.SamplesPerSecond,
-                                             sourceAttributes.Channels, avgBytesPerSecond);
+                                             sourceAttributes.Channels, GetAacQualityBytesPerSecond(quality));
 
     auto topology = CreateTopology(source.Get(), output, profile.get());
     THROW_IF_FAILED(m_session->SetTopology(0, topology.get()));

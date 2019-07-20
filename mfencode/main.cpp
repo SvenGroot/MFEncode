@@ -1,10 +1,13 @@
 #include "precomp.h"
 #include "mfutil.h"
+#include "resource.h"
 using namespace std;
 using namespace std::chrono_literals;
 using namespace ookii::chrono;
 
 using unique_cursor_enable = wil::unique_call<decltype(ookii::EnableConsoleCursor), ookii::EnableConsoleCursor>;
+
+ookii::WinResourceProvider g_resourceProvider{GetModuleHandle(nullptr)};
 
 std::wstring ChangeExtension(std::wstring_view path, std::wstring_view newExtension)
 {
@@ -24,6 +27,7 @@ struct Arguments
 {
     std::wstring Input;
     std::wstring Output;
+    int Quality;
 
     static std::optional<Arguments> Parse(int argc, wchar_t *argv[])
     {
@@ -31,8 +35,9 @@ struct Arguments
         try
         {
             Arguments args;
-            parser.AddArgument(args.Input, L"Input").Required().Positional().ValueDescription(L"Path")
-                .AddArgument(args.Output, L"Output").Positional().ValueDescription(L"Path");
+            parser.AddArgument(args.Input, L"Input").Required().Positional().ValueDescription(L"Path").Description(IDS_INPUT_ARGUMENT_DESCRIPTION)
+                .AddArgument(args.Output, L"Output").Positional().ValueDescription(L"Path").Description(IDS_OUTPUT_ARGUMENT_DESCRIPTION)
+                .AddArgument(args.Quality, L"Quality").Positional().DefaultValue(2).Description(IDS_QUALITY_ARGUMENT_DESCRIPTION);
 
             parser.Parse(argc, argv);
             if (args.Output.length() == 0)
@@ -66,9 +71,10 @@ void EncodeFile(const Arguments &args)
           << "; bit depth: " << attributes.BitsPerSample 
           << "; sample rate: " << attributes.SamplesPerSecond
           << "; channels: " << attributes.Channels
+          << "; bitrate: " << ((mf::GetAacQualityBytesPerSecond(args.Quality) * 8) / 1000) << "kbps"
           << endl;
 
-    mf::TranscodeSession session{source, args.Output.c_str(), 24000};
+    mf::TranscodeSession session{source, args.Output.c_str(), args.Quality};
     session.Start();
     float prevProgress{};
     ookii::DisableConsoleCursor();
@@ -92,6 +98,7 @@ int wmain(int argc, wchar_t *argv[])
 {
     try
     {
+        ookii::SetGlobalResourceProvider(&g_resourceProvider);
         auto args = Arguments::Parse(argc, argv);
         if (!args)
         {

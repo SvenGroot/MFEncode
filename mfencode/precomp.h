@@ -20,3 +20,4 @@
 #include <ookii/command_line.h>
 #include <ookii/chrono.h>
 #include <ookii/console.h>
+#include <ookii/resource_provider_win.h>
