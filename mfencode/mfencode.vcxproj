@@ -85,13 +85,19 @@
       <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\include;$(ProjectDir)$(IntermediateOutputPath);$(SolutionDir)..\Ookii.Utility.Cpp\external\GSL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Ookii.Utility.Cpp-debug-unicode.lib;mfplat.lib;mf.lib;mfuuid.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>"$(windir)\Sysnative\WindowsPowerShell\v1.0\powershell.exe" "$(SolutionDir)..\Ookii.Utility.Cpp\ookii\bin\Generate-OokiiMain.ps1" "$(ProjectDir)main.cpp" "$(ProjectDir)$(IntermediateOutputPath)main_generated.cpp" -UpcaseArgumentNames</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Generating main_generated.cpp</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -103,13 +109,19 @@
       <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\include;$(ProjectDir)$(IntermediateOutputPath);$(SolutionDir)..\Ookii.Utility.Cpp\external\GSL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Ookii.Utility.Cpp-debug-unicode.lib;mfplat.lib;mf.lib;mfuuid.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>"$(windir)\Sysnative\WindowsPowerShell\v1.0\powershell.exe" "$(SolutionDir)..\Ookii.Utility.Cpp\ookii\bin\Generate-OokiiMain.ps1" "$(ProjectDir)main.cpp" "$(ProjectDir)$(IntermediateOutputPath)main_generated.cpp" -UpcaseArgumentNames</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Generating main_generated.cpp</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -121,7 +133,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\include;$(ProjectDir)$(IntermediateOutputPath);$(SolutionDir)..\Ookii.Utility.Cpp\external\GSL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -132,6 +144,12 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\lib32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Ookii.Utility.Cpp-unicode.lib;mfplat.lib;mf.lib;mfuuid.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>"$(windir)\Sysnative\WindowsPowerShell\v1.0\powershell.exe" "$(SolutionDir)..\Ookii.Utility.Cpp\ookii\bin\Generate-OokiiMain.ps1" "$(ProjectDir)main.cpp" "$(ProjectDir)$(IntermediateOutputPath)main_generated.cpp" -UpcaseArgumentNames</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Generating main_generated.cpp</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -143,7 +161,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp17</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\include;$(ProjectDir)$(IntermediateOutputPath);$(SolutionDir)..\Ookii.Utility.Cpp\external\GSL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
     </ClCompile>
@@ -154,6 +172,12 @@
       <AdditionalLibraryDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\ookii\lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Ookii.Utility.Cpp-unicode.lib;mfplat.lib;mf.lib;mfuuid.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PreBuildEvent>
+      <Command>"$(windir)\Sysnative\WindowsPowerShell\v1.0\powershell.exe" "$(SolutionDir)..\Ookii.Utility.Cpp\ookii\bin\Generate-OokiiMain.ps1" "$(ProjectDir)main.cpp" "$(ProjectDir)$(IntermediateOutputPath)main_generated.cpp" -UpcaseArgumentNames</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>Generating main_generated.cpp</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
