@@ -9,24 +9,10 @@ using unique_cursor_enable = wil::unique_call<decltype(ookii::EnableConsoleCurso
 
 ookii::WinResourceProvider g_resourceProvider{GetModuleHandle(nullptr)};
 
-std::wstring ChangeExtension(std::wstring_view path, std::wstring_view newExtension)
-{
-    auto index = path.find_last_of(L"./\\");
-    std::wstring_view base = path;
-    if (index != std::wstring_view::npos && path[index] == L'.')
-    {
-        base = path.substr(0, index);
-    }
-
-    std::wstring result{base};
-    result.append(newExtension);
-    return result;
-}
-
 struct Arguments
 {
-    std::wstring Input;
-    std::wstring Output;
+    std::filesystem::path Input;
+    std::filesystem::path Output;
     int Quality;
 
     static std::optional<Arguments> Parse(int argc, wchar_t *argv[])
@@ -35,14 +21,15 @@ struct Arguments
         try
         {
             Arguments args;
-            parser.AddArgument(args.Input, L"Input").Required().Positional().ValueDescription(L"Path").Description(IDS_INPUT_ARGUMENT_DESCRIPTION)
-                .AddArgument(args.Output, L"Output").Positional().ValueDescription(L"Path").Description(IDS_OUTPUT_ARGUMENT_DESCRIPTION)
+            parser.AddArgument(args.Input, L"Input").Required().Positional().Description(IDS_INPUT_ARGUMENT_DESCRIPTION)
+                .AddArgument(args.Output, L"Output").Positional().Description(IDS_OUTPUT_ARGUMENT_DESCRIPTION)
                 .AddArgument(args.Quality, L"Quality").Positional().DefaultValue(2).Description(IDS_QUALITY_ARGUMENT_DESCRIPTION);
 
             parser.Parse(argc, argv);
-            if (args.Output.length() == 0)
+            if (args.Output.empty())
             {
-                args.Output = ChangeExtension(args.Input, L".m4a"sv);
+                args.Output = args.Input;
+                args.Output.replace_extension(L".m4a");
             }
 
             return args;

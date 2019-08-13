@@ -9,6 +9,7 @@
 // STL headers
 #include <iostream>
 #include <chrono>
+#include <filesystem>
 
 // WIL headers
 #include <wil/result.h>
