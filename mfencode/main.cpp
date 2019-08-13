@@ -119,15 +119,19 @@ int ookii_main(std::filesystem::path input, std::filesystem::path output = {}, i
     }
     catch (const ookii::Exception &ex)
     {
-        wcout << ex.Description() << endl;
+        wcerr << ex.Description() << endl;
+    }
+    catch (const wil::ResultException &ex)
+    {
+        wcerr << ookii::GetSystemErrorMessage(ex.GetErrorCode()) << endl;
     }
     catch (const exception &ex)
     {
-        cout << ex.what() << endl;
+        cerr << ex.what() << endl;
     }
     catch (...)
     {
-        cout << "Unknown exception." << endl;
+        wcerr << L"Unknown exception." << endl;
     }
 
     return 1;

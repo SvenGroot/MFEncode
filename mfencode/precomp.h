@@ -22,3 +22,4 @@
 #include <ookii/chrono.h>
 #include <ookii/console.h>
 #include <ookii/resource_provider_win.h>
+#include <ookii/system_exception.h>
