@@ -5,7 +5,15 @@ using namespace std;
 using namespace std::chrono_literals;
 using namespace ookii::chrono;
 
-using unique_cursor_enable = wil::unique_call<decltype(ookii::EnableConsoleCursor), ookii::EnableConsoleCursor>;
+namespace details
+{
+    void EnableCursor()
+    {
+        ookii::console::SetCursorVisible(true);
+    }
+}
+
+using unique_cursor_enable = wil::unique_call<decltype(::details::EnableCursor), ::details::EnableCursor>;
 
 ookii::WinResourceProvider g_resourceProvider{GetModuleHandle(nullptr)};
 
@@ -45,15 +53,15 @@ struct Arguments
 
 void ShowProgress(float progress)
 {
-    ookii::PrintProgressBar(wcout, progress, L"Encoding: "sv);
+    ookii::console::PrintProgressBar(wcout, progress, L"Encoding: "sv);
 }
 
 void EncodeFile(const Arguments &args)
 {
     mf::MediaSource source{args.Input.c_str()};
     auto attributes = source.GetAttributes();
-    wcout << "Input: " << args.Input << endl;
-    wcout << "Output: " << args.Output << endl;
+    wcout << "Input: " << args.Input.wstring() << endl;
+    wcout << "Output: " << args.Output.wstring() << endl;
     wcout << "Duration: " << ookii::chrono::DurationPrinter{attributes.Duration, 0}
           << "; bit depth: " << attributes.BitsPerSample 
           << "; sample rate: " << attributes.SamplesPerSecond
@@ -64,7 +72,7 @@ void EncodeFile(const Arguments &args)
     mf::TranscodeSession session{source, args.Output.c_str(), args.Quality};
     session.Start();
     float prevProgress{};
-    ookii::DisableConsoleCursor();
+    ookii::console::SetCursorVisible(false);
     unique_cursor_enable reenable;
     ShowProgress(0.0f);
     while (!session.Wait(100ms)) 
@@ -85,6 +93,7 @@ int wmain(int argc, wchar_t *argv[])
 {
     try
     {
+        ookii::console::EnableVirtualTerminalSequences();
         ookii::SetGlobalResourceProvider(&g_resourceProvider);
         auto args = Arguments::Parse(argc, argv);
         if (!args)
