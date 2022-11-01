@@ -2,11 +2,7 @@
 // Microsoft Visual C++ generated include file.
 // Used by mfencode.rc
 //
-#define IDS_INPUT_ARGUMENT_DESCRIPTION  101
-#define IDS_OUTPUT_ARGUMENT_DESCRIPTION 102
-#define IDS_QUALITY_ARGUMENT_DESCRIPTION 103
 #define DS_APP_DESCRIPTION              104
-#define IDS_APP_DESCRIPTION             104
 
 // Next default values for new objects
 // 
