@@ -1,7 +1,7 @@
 #include "precomp.h"
 #include "mfutil.h"
 #include "resource.h"
-#include <ookii/ookii_main.h>
+#include "arguments.h"
 using namespace std;
 using namespace std::chrono_literals;
 using namespace ookii::chrono;
@@ -23,40 +23,6 @@ using unique_cursor_enable = wil::unique_call<decltype(::details::EnableCursor),
 }
 
 ookii::WinResourceProvider g_resourceProvider{GetModuleHandle(nullptr), true};
-
-struct Arguments
-{
-    std::filesystem::path Input;
-    std::filesystem::path Output;
-    int Quality;
-
-    static std::optional<Arguments> Parse(int argc, wchar_t *argv[])
-    {
-        ookii::CommandLineParser parser{argv[0]};
-        try
-        {
-            Arguments args;
-            parser.AddArgument(args.Input, L"Input").Required().Positional().Description(IDS_INPUT_ARGUMENT_DESCRIPTION)
-                .AddArgument(args.Output, L"Output").Positional().Description(IDS_OUTPUT_ARGUMENT_DESCRIPTION)
-                .AddArgument(args.Quality, L"Quality").Positional().DefaultValue(2).Description(IDS_QUALITY_ARGUMENT_DESCRIPTION);
-
-            parser.Parse(argc, argv);
-            if (args.Output.empty())
-            {
-                args.Output = args.Input;
-                args.Output.replace_extension(L".m4a");
-            }
-
-            return args;
-        }
-        catch (const ookii::CommandLineException &ex)
-        {
-            wcout << ex.Description() << endl;
-            parser.WriteUsageToConsole();
-            return {};
-        }
-    }
-};
 
 void ShowProgress(float progress)
 {
@@ -95,11 +61,7 @@ void EncodeFile(const std::filesystem::path &input, const std::filesystem::path 
     wcout << endl;
 }
 
-/// res:IDS_APP_DESCRIPTION
-// input (Path): res:IDS_INPUT_ARGUMENT_DESCRIPTION
-// output (Path): res:IDS_OUTPUT_ARGUMENT_DESCRIPTION
-// quality: res:IDS_QUALITY_ARGUMENT_DESCRIPTION
-int ookii_main(std::filesystem::path input, std::filesystem::path output = {}, int quality = 2)
+int mfencode_main(Arguments args)
 {
     try
     {
@@ -107,13 +69,14 @@ int ookii_main(std::filesystem::path input, std::filesystem::path output = {}, i
         auto com = wil::CoInitializeEx();
         auto mf = mf::Startup();
 
+        std::filesystem::path output{args.Output};
         if (output.empty())
         {
-            output = input;
+            output = args.Input;
             output.replace_extension(L".m4a");
         }
 
-        EncodeFile(input, output, quality);
+        EncodeFile(args.Input, output, args.Quality);
 
         return 0;
     }
@@ -136,5 +99,3 @@ int ookii_main(std::filesystem::path input, std::filesystem::path output = {}, i
 
     return 1;
 }
-
-#include <main_generated.cpp>

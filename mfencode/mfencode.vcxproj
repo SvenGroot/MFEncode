@@ -83,8 +83,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;OOKII_NO_PLATFORM_HEADERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\out\install\include;$(ProjectDir)$(IntermediateOutputPath);$(SolutionDir)..\Ookii.Utility.Cpp\external\GSL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -93,10 +93,12 @@
       <AdditionalDependencies>ookii-debug-unicode.lib;mfplat.lib;mf.lib;mfuuid.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>"$(windir)\Sysnative\WindowsPowerShell\v1.0\powershell.exe" "$(SolutionDir)..\Ookii.Utility.Cpp\ookii\bin\Generate-OokiiMain.ps1" "$(ProjectDir)main.cpp" "$(ProjectDir)$(IntermediateOutputPath)main_generated.cpp" -UpcaseArgumentNames</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PreBuildEvent>
-      <Message>Generating main_generated.cpp</Message>
+      <Message>
+      </Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -107,8 +109,8 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
-      <LanguageStandard>stdcpp17</LanguageStandard>
-      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;OOKII_NO_PLATFORM_HEADERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\out\install\include;$(ProjectDir)$(IntermediateOutputPath);$(SolutionDir)..\Ookii.Utility.Cpp\external\GSL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -117,10 +119,12 @@
       <AdditionalDependencies>ookii-debug-unicode.lib;mfplat.lib;mf.lib;mfuuid.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>pwsh.exe "$(SolutionDir)..\Ookii.Utility.Cpp\out\install\bin\Generate-OokiiMain.ps1" "$(ProjectDir)main.cpp" "$(ProjectDir)$(IntermediateOutputPath)main_generated.cpp" -UpcaseArgumentNames</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PreBuildEvent>
-      <Message>Generating main_generated.cpp</Message>
+      <Message>
+      </Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,8 +135,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;OOKII_NO_PLATFORM_HEADERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\out\install\include;$(ProjectDir)$(IntermediateOutputPath);$(SolutionDir)..\Ookii.Utility.Cpp\external\GSL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
@@ -145,10 +149,12 @@
       <AdditionalDependencies>ookii-unicode.lib;mfplat.lib;mf.lib;mfuuid.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>"$(windir)\Sysnative\WindowsPowerShell\v1.0\powershell.exe" "$(SolutionDir)..\Ookii.Utility.Cpp\ookii\bin\Generate-OokiiMain.ps1" "$(ProjectDir)main.cpp" "$(ProjectDir)$(IntermediateOutputPath)main_generated.cpp" -UpcaseArgumentNames</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PreBuildEvent>
-      <Message>Generating main_generated.cpp</Message>
+      <Message>
+      </Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -159,8 +165,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <PreprocessorDefinitions>WIN32_LEAN_AND_MEAN;NOMINMAX;OOKII_NO_PLATFORM_HEADERS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>$(SolutionDir)..\Ookii.Utility.Cpp\out\install\include;$(ProjectDir)$(IntermediateOutputPath);$(SolutionDir)..\Ookii.Utility.Cpp\external\GSL\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>precomp.h</PrecompiledHeaderFile>
@@ -173,10 +179,12 @@
       <AdditionalDependencies>ookii-unicode.lib;mfplat.lib;mf.lib;mfuuid.lib;shlwapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>pwsh.exe "$(SolutionDir)..\Ookii.Utility.Cpp\out\install\bin\Generate-OokiiMain.ps1" "$(ProjectDir)main.cpp" "$(ProjectDir)$(IntermediateOutputPath)main_generated.cpp" -UpcaseArgumentNames</Command>
+      <Command>
+      </Command>
     </PreBuildEvent>
     <PreBuildEvent>
-      <Message>Generating main_generated.cpp</Message>
+      <Message>
+      </Message>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -190,24 +198,34 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="arguments.h" />
     <ClInclude Include="mfutil.h" />
     <ClInclude Include="precomp.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="mfencode.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ItemGroup>
+    <OokiiParserInput Include="arguments.h" />
+  </ItemGroup>
+  <PropertyGroup>
+    <OokiiParserEntryPoint>mfencode_main</OokiiParserEntryPoint>
+    <OokiiParserAdditionalHeaders>precomp.h</OokiiParserAdditionalHeaders>
+  </PropertyGroup>
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.Windows.ImplementationLibrary.1.0.190716.2\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.190716.2\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
+    <Import Project="..\packages\Microsoft.Windows.ImplementationLibrary.1.0.220914.1\build\native\Microsoft.Windows.ImplementationLibrary.targets" Condition="Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.220914.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" />
+    <Import Project="..\packages\Ookii.CommandLine.Cpp.1.0.0\build\native\Ookii.CommandLine.Cpp.targets" Condition="Exists('..\packages\Ookii.CommandLine.Cpp.1.0.0\build\native\Ookii.CommandLine.Cpp.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.190716.2\build\native\Microsoft.Windows.ImplementationLibrary.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.ImplementationLibrary.1.0.190716.2\build\native\Microsoft.Windows.ImplementationLibrary.targets'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.Windows.ImplementationLibrary.1.0.220914.1\build\native\Microsoft.Windows.ImplementationLibrary.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Windows.ImplementationLibrary.1.0.220914.1\build\native\Microsoft.Windows.ImplementationLibrary.targets'))" />
+    <Error Condition="!Exists('..\packages\Ookii.CommandLine.Cpp.1.0.0\build\native\Ookii.CommandLine.Cpp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Ookii.CommandLine.Cpp.1.0.0\build\native\Ookii.CommandLine.Cpp.targets'))" />
   </Target>
 </Project>

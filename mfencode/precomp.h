@@ -23,3 +23,4 @@
 #include <ookii/console.h>
 #include <ookii/resource_provider_win.h>
 #include <ookii/system_exception.h>
+#include <ookii/command_line_generated.h>
