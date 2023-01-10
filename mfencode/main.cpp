@@ -59,12 +59,20 @@ int mfencode_main(Arguments args)
         }
 
         EncodeFile(args.Input, output, args.Quality);
-
         return 0;
     }
     catch (const wil::ResultException &ex)
     {
-        util::WriteError(util::GetSystemErrorMessage(ex.GetErrorCode()));
+        if (args.Verbose)
+        {
+            wchar_t msg[2048];
+            wil::GetFailureLogString(msg, std::size(msg), ex.GetFailureInfo());
+            util::WriteError(msg);
+        }
+        else
+        {
+            util::WriteError(util::GetSystemErrorMessage(ex.GetErrorCode()));
+        }
     }
     catch (const exception &ex)
     {

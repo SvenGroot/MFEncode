@@ -30,6 +30,10 @@ struct Arguments
     // Overwrite the output file if it exists.
     bool Force;
 
+    // [argument, alias: v]
+    // Shows detailed error information if available.
+    bool Verbose;
+
     OOKII_GENERATED_METHODS(Arguments);
 };
 

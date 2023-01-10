@@ -155,7 +155,11 @@ bool TranscodeSession::Wait(std::chrono::milliseconds timeout)
 {
     if (m_waitEvent.wait(static_cast<DWORD>(timeout.count()))) 
     {
-        THROW_IF_FAILED(m_result);
+        if (m_exception)
+        {
+            std::rethrow_exception(m_exception);
+        }
+
         return true;
     }
 
@@ -198,9 +202,9 @@ void TranscodeSession::OnSessionClosed()
     m_waitEvent.SetEvent();
 }
 
-void TranscodeSession::OnError(HRESULT result)
+void TranscodeSession::OnError(std::exception_ptr exception)
 {
-    m_result = result;
+    m_exception = exception;
     m_session->Close();
     m_waitEvent.SetEvent();
 }
@@ -308,9 +312,8 @@ STDMETHODIMP SessionEventSink::Invoke(IMFAsyncResult *result) try
 }
 catch (...)
 {
-    auto result = wil::ResultFromCaughtException();
-    m_eventHandler.OnError(result);
-    return result;
+    m_eventHandler.OnError(std::current_exception());
+    return wil::ResultFromCaughtException();
 }
 
 void SessionEventSink::BeginGetEvent()

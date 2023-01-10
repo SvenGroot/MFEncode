@@ -34,7 +34,7 @@ class ISessionEvents
 public:
     virtual void OnSessionEnded() = 0;
     virtual void OnSessionClosed() = 0;
-    virtual void OnError(HRESULT result) = 0;
+    virtual void OnError(std::exception_ptr exception) = 0;
     virtual IMFMediaSession *GetMediaSession() = 0;
     virtual IMFTopology *GetTopology() = 0;
 };
@@ -71,7 +71,7 @@ public:
 private:
     void OnSessionEnded() override;
     void OnSessionClosed() override;
-    void OnError(HRESULT result) override;
+    void OnError(std::exception_ptr exception) override;
     IMFMediaSession *GetMediaSession() override;
     IMFTopology *GetTopology() override;
 
@@ -80,7 +80,7 @@ private:
     wil::com_ptr<SessionEventSink> m_eventSink;
     wil::com_ptr<IMFPresentationClock> m_clock;
     wil::unique_event m_waitEvent;
-    HRESULT m_result{};
+    std::exception_ptr m_exception;
     util::WindowsTimeUnits m_duration{};
 };
 
