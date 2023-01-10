@@ -1,8 +1,6 @@
-// This file is used to generate a command line parser and main() function using a custom MSBuild
-// target. Changing settings requires manually editing the .vcxproj.
+// This file is used by Ookii.CommandLine to generate a command line parser and main() function
+// using a custom MSBuild target. Changing settings requires manually editing the .vcxproj file.
 #pragma once
-
-#include <filesystem>
 
 // [arguments]
 // [win32_version]

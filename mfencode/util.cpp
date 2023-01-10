@@ -77,8 +77,8 @@ void ShowProgress(float progress, bool use_color)
     }
 
     wcout << WriteColor(use_color, ookii::vt::text_format::bright_foreground_blue) << "] " 
-           << WriteColor(use_color, ookii::vt::text_format::default_format)
-           << fixed << setw(3) << setfill(L' ') << setprecision(0) << (100 * progress) << "%" << std::flush;
+          << WriteColor(use_color, ookii::vt::text_format::default_format)
+          << fixed << setw(3) << setfill(L' ') << setprecision(0) << (100 * progress) << "%" << std::flush;
 }
 
 wstring GetSystemErrorMessage(HRESULT errorCode)
