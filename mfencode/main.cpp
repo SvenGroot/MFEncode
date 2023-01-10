@@ -52,6 +52,12 @@ int mfencode_main(Arguments args)
             output.replace_extension(L".m4a");
         }
 
+        if (!args.Force && std::filesystem::exists(output))
+        {
+            util::WriteError("The output file already exists. Use -Force to overwrite.");
+            return 1;
+        }
+
         EncodeFile(args.Input, output, args.Quality);
 
         return 0;

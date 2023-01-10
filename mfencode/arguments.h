@@ -12,15 +12,21 @@ struct Arguments
     // [value_description: path]
     // The path of the input media file.
     std::wstring Input;
+
     // [argument, positional]
     // [value_description: path]
     // The path of the output AAC file. If not specified, it will be the input path with the
     // extension replaced by '.m4a'.
     std::wstring Output;
+
     // [argument, positional, default: 2]
     // The quality of the output file. Possible values: 
     // 1: 96kbps; 2: 128kbps; 3: 160kbps; 4: 192kbps;
     int Quality;
+
+    // [argument, alias: f]
+    // Overwrite the output file if it exists.
+    bool Force;
 
     OOKII_GENERATED_METHODS(Arguments);
 };
