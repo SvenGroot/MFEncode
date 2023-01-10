@@ -4,30 +4,6 @@
 #include "arguments.h"
 using namespace std;
 using namespace std::chrono_literals;
-using namespace ookii::chrono;
-
-namespace details
-{
-    void EnableCursor()
-    {
-        ookii::console::SetCursorVisible(true);
-    }
-}
-
-using unique_cursor_enable = wil::unique_call<decltype(::details::EnableCursor), ::details::EnableCursor>;
-
-[[nodiscard]] auto HideCursor()
-{
-    ookii::console::SetCursorVisible(false);
-    return unique_cursor_enable{};
-}
-
-ookii::WinResourceProvider g_resourceProvider{GetModuleHandle(nullptr), true};
-
-void ShowProgress(float progress)
-{
-    ookii::console::PrintProgressBar(wcout, progress, L"Encoding: "sv);
-}
 
 void EncodeFile(const std::filesystem::path &input, const std::filesystem::path &output, int quality)
 {
@@ -35,7 +11,7 @@ void EncodeFile(const std::filesystem::path &input, const std::filesystem::path 
     auto attributes = source.GetAttributes();
     wcout << "Input: " << input.wstring() << endl;
     wcout << "Output: " << output.wstring() << endl;
-    wcout << "Duration: " << ookii::chrono::DurationPrinter{attributes.Duration, 0}
+    wcout << "Duration: " << util::DurationPrinter{attributes.Duration}
           << "; bit depth: " << attributes.BitsPerSample 
           << "; sample rate: " << attributes.SamplesPerSecond
           << "; channels: " << attributes.Channels
@@ -45,20 +21,21 @@ void EncodeFile(const std::filesystem::path &input, const std::filesystem::path 
     mf::TranscodeSession session{source, output.c_str(), quality};
     session.Start();
     float prevProgress{};
-    unique_cursor_enable reenable = HideCursor();
-    ShowProgress(0.0f);
+    auto cursorEnable = util::HideCursor();
+    auto vtSupport = ookii::vt::virtual_terminal_support::enable_color(ookii::standard_stream::output);
+    auto endProgressBar = wil::scope_exit([]() { wcout << endl; });
+    util::ShowProgress(0.0f, vtSupport);
     while (!session.Wait(100ms)) 
     {
         auto progress = session.GetProgress();
         if (progress > prevProgress)
         {
-            ShowProgress(progress);
+            util::ShowProgress(progress, vtSupport);
             prevProgress = progress;
         }
     }
 
-    ShowProgress(1.0f);
-    wcout << endl;
+    util::ShowProgress(1.0f, vtSupport);
 }
 
 int mfencode_main(Arguments args)
@@ -79,21 +56,17 @@ int mfencode_main(Arguments args)
 
         return 0;
     }
-    catch (const ookii::Exception &ex)
-    {
-        wcerr << ex.Description() << endl;
-    }
     catch (const wil::ResultException &ex)
     {
-        wcerr << ookii::GetSystemErrorMessage(ex.GetErrorCode()) << endl;
+        util::WriteError(util::GetSystemErrorMessage(ex.GetErrorCode()));
     }
     catch (const exception &ex)
     {
-        cerr << ex.what() << endl;
+        util::WriteError(ex.what());
     }
     catch (...)
     {
-        wcerr << L"Unknown exception." << endl;
+        util::WriteError(L"Unknown exception.");
     }
 
     return 1;

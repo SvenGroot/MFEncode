@@ -1,5 +1,7 @@
 #pragma once
 
+#include "util.h"
+
 namespace mf
 {
 
@@ -9,7 +11,7 @@ using unique_mfshutdown_call = wil::unique_call<decltype(::MFShutdown), ::MFShut
 
 struct MediaAttributes
 {
-    ookii::chrono::WindowsTimeUnits Duration;
+    util::WindowsTimeUnits Duration;
     UINT32 BitsPerSample;
     UINT32 SamplesPerSecond;
     UINT32 Channels;
@@ -34,6 +36,7 @@ public:
     virtual void OnSessionClosed() = 0;
     virtual void OnError(HRESULT result) = 0;
     virtual IMFMediaSession *GetMediaSession() = 0;
+    virtual IMFTopology *GetTopology() = 0;
 };
 
 class SessionEventSink
@@ -62,7 +65,7 @@ public:
 
     void Start();
     bool Wait(std::chrono::milliseconds timeout);
-    ookii::chrono::WindowsTimeUnits GetPosition() const;
+    util::WindowsTimeUnits GetPosition() const;
     float GetProgress() const;
 
 private:
@@ -70,13 +73,15 @@ private:
     void OnSessionClosed() override;
     void OnError(HRESULT result) override;
     IMFMediaSession *GetMediaSession() override;
+    IMFTopology *GetTopology() override;
 
     wil::com_ptr<IMFMediaSession> m_session;
+    wil::com_ptr<IMFTopology> m_topology;
     wil::com_ptr<SessionEventSink> m_eventSink;
     wil::com_ptr<IMFPresentationClock> m_clock;
     wil::unique_event m_waitEvent;
     HRESULT m_result{};
-    ookii::chrono::WindowsTimeUnits m_duration{};
+    util::WindowsTimeUnits m_duration{};
 };
 
 class AttributeHelper

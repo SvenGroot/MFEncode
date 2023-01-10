@@ -101,7 +101,7 @@ MediaAttributes MediaSource::GetAttributes() const
 
     wil::com_ptr<IMFPresentationDescriptor> pd;
     THROW_IF_FAILED(m_source->CreatePresentationDescriptor(&pd));
-    result.Duration = ookii::chrono::WindowsTimeUnits{AttributeHelper{pd.get()}.GetUINT64(MF_PD_DURATION)};
+    result.Duration = util::WindowsTimeUnits{AttributeHelper{pd.get()}.GetUINT64(MF_PD_DURATION)};
 
     wil::com_ptr<IMFStreamDescriptor> stream;
     BOOL selected;
@@ -132,8 +132,8 @@ TranscodeSession::TranscodeSession(MediaSource &source, PCWSTR output, int quali
     auto profile = CreateAacTranscodeProfile(sourceAttributes.BitsPerSample, sourceAttributes.SamplesPerSecond,
                                              sourceAttributes.Channels, GetAacQualityBytesPerSecond(quality));
 
-    auto topology = CreateTopology(source.Get(), output, profile.get());
-    THROW_IF_FAILED(m_session->SetTopology(0, topology.get()));
+    m_topology = CreateTopology(source.Get(), output, profile.get());
+    THROW_IF_FAILED(m_session->SetTopology(0, m_topology.get()));
     
     wil::com_ptr<IMFClock> clock;
     THROW_IF_FAILED(m_session->GetClock(&clock));
@@ -162,11 +162,20 @@ bool TranscodeSession::Wait(std::chrono::milliseconds timeout)
     return false;
 }
 
-ookii::chrono::WindowsTimeUnits TranscodeSession::GetPosition() const
+util::WindowsTimeUnits TranscodeSession::GetPosition() const
 {
     MFTIME time;
-    THROW_IF_FAILED(m_clock->GetTime(&time));
-    return ookii::chrono::WindowsTimeUnits{time};
+    auto result = m_clock->GetTime(&time);
+
+    // This error is sometimes returned on the first call; I guess it means the session hasn't
+    // fully started yet. It is transient, so ignore it.
+    if (result == MF_E_CLOCK_NO_TIME_SOURCE)
+    {
+        return {};
+    }
+
+    THROW_IF_FAILED(result);
+    return util::WindowsTimeUnits{time};
 }
 
 float TranscodeSession::GetProgress() const
@@ -199,6 +208,11 @@ void TranscodeSession::OnError(HRESULT result)
 IMFMediaSession *TranscodeSession::GetMediaSession()
 {
     return m_session.get();
+}
+
+IMFTopology *TranscodeSession::GetTopology()
+{
+    return m_topology.get();
 }
 
 AttributeHelper::AttributeHelper(IMFAttributes *attributes)
@@ -258,6 +272,20 @@ STDMETHODIMP SessionEventSink::Invoke(IMFAsyncResult *result) try
     THROW_IF_FAILED(event->GetType(&type));
     HRESULT status;
     THROW_IF_FAILED(event->GetStatus(&status));
+
+    // The error message for MF_E_CREATE_SINK is rather useless. It usually means the output file
+    // could not be created for some reason. Get the actual error code from the output node.
+    if (status == MF_E_CANNOT_CREATE_SINK)
+    {
+        auto topology = m_eventHandler.GetTopology();
+        wil::com_ptr<IMFCollection> outputNodes;
+        THROW_IF_FAILED(topology->GetOutputNodeCollection(&outputNodes));
+        wil::com_ptr<IUnknown> outputUnknown;
+        THROW_IF_FAILED(outputNodes->GetElement(0, &outputUnknown));
+        auto node = outputUnknown.query<IMFTopologyNode>();
+        THROW_HR(static_cast<HRESULT>(AttributeHelper{node.get()}.GetUINT32(MF_TOPONODE_ERRORCODE)));
+    }
+
     THROW_IF_FAILED(status);
 
     switch (type)

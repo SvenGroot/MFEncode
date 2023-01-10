@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <mfapi.h>
 #include <mfidl.h>
+#include <mferror.h>
 #include <shlwapi.h>
 #include <io.h>
 
@@ -17,11 +18,7 @@
 #include <wil/resource.h>
 #include <wil/com.h>
 #include <wil/wrl.h>
+#include <wil/win32_helpers.h>
 
-// Ookii.Utility headers
-#include <ookii/command_line.h>
-#include <ookii/chrono.h>
-#include <ookii/console.h>
-#include <ookii/resource_provider_win.h>
-#include <ookii/system_exception.h>
+// Ookii.CommandLine headers
 #include <ookii/command_line_generated.h>
