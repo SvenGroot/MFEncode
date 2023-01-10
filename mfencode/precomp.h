@@ -5,6 +5,7 @@
 #include <mfapi.h>
 #include <mfidl.h>
 #include <shlwapi.h>
+#include <io.h>
 
 // STL headers
 #include <iostream>

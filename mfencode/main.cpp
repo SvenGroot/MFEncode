@@ -65,7 +65,6 @@ int mfencode_main(Arguments args)
 {
     try
     {
-        ookii::console::EnableVirtualTerminalSequences();
         auto com = wil::CoInitializeEx();
         auto mf = mf::Startup();
 
