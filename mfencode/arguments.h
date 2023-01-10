@@ -1,3 +1,5 @@
+// This file is used to generate a command line parser and main() function using a custom MSBuild
+// target. Changing settings requires manually editing the .vcxproj.
 #pragma once
 
 #include <filesystem>
