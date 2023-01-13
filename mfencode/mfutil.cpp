@@ -72,7 +72,7 @@ UINT32 GetAacQualityBytesPerSecond(int quality)
     {
         quality = 1;
     }
-    else if (quality > std::size(c_aacQualityBytesPerSecond))
+    else if (quality > static_cast<int>(std::size(c_aacQualityBytesPerSecond)))
     {
         quality = static_cast<int>(std::size(c_aacQualityBytesPerSecond));
     }
