@@ -215,6 +215,9 @@
   <ItemGroup>
     <OokiiParserInput Include="arguments.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="app.manifest" />
+  </ItemGroup>
   <PropertyGroup>
     <OokiiParserEntryPoint>mfencode_main</OokiiParserEntryPoint>
     <OokiiParserAdditionalHeaders>precomp.h</OokiiParserAdditionalHeaders>
